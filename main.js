@@ -41,7 +41,7 @@ const randomClient = function(name) {
 
 const matchRandomly = function(name) {
   // get our client's location within our system
-  const clientLocation = names.indexOf(name);
+  const clientLocation = names.indexOf(name) ;
 
   // exclude our client from matches by making an array of everyone else
   // find all the clients before our client in the system
@@ -60,7 +60,7 @@ const getRank = function(client) {
   // this is backwards or something? they're supposed to be ranked
   // from lowest to highest, and the top one (spider, obvously) should
   // be ranked #1
-  return clients.indexOf(client);
+  return clients.length - clients.indexOf(client);
 }
 
 const getMatch = function(client) {
