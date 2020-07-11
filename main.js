@@ -30,29 +30,31 @@ const command = process.argv[2];
 // the name they want it run on
 const name = process.argv[3]
 // the corresponding client
-const client = clients[names.indexOf(name) !== -1]
+const client = clients[names.indexOf(name)]
 
 
 // get a random client from whatever list was passed in
-const randomClient = function(clients) {
-  return clients[Math.floor(Math.random() * clients.length - 1)];
+const randomClient = function(name) {
+  return clients[Math.floor(Math.random() * clients.length)];
 }
 
-const matchRandomly = function(client) {
+
+const matchRandomly = function(name) {
   // get our client's location within our system
-  const clientLocation = clients.indexOf(client);
+  const clientLocation = names.indexOf(name);
 
   // exclude our client from matches by making an array of everyone else
   // find all the clients before our client in the system
   const clientsBeforeOurClient = clients.slice(0, clientLocation);
   // find all the clients after our client in the system
-  const clientsAfterOurClient = clients.slice(clientLocation);
+  const clientsAfterOurClient = clients.slice(clientLocation + 1, clients.length);
   // add them together
   const otherClients = clientsBeforeOurClient + clientsAfterOurClient;
 
   // return a random client from the remaining pool
   return randomClient(otherClients);
 }
+
 
 const getRank = function(client) {
   // this is backwards or something? they're supposed to be ranked
