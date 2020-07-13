@@ -34,25 +34,31 @@ const client = clients[names.indexOf(name)]
 
 
 // get a random client from whatever list was passed in
-const randomClient = function(name) {
-  return clients[Math.floor(Math.random() * clients.length)];
+const randomClient = function(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
 
-const matchRandomly = function(name) {
+const matchRandomly = function(client) {
   // get our client's location within our system
-  const clientLocation = names.indexOf(name) ;
+  const clientLocation = names.indexOf(client) ;
 
   // exclude our client from matches by making an array of everyone else
   // find all the clients before our client in the system
   const clientsBeforeOurClient = clients.slice(0, clientLocation);
   // find all the clients after our client in the system
-  const clientsAfterOurClient = clients.slice(clientLocation + 1, clients.length);
+  const clientsAfterOurClient = clients.slice(clientLocation + 1);
   // add them together
-  const otherClients = clientsBeforeOurClient + clientsAfterOurClient;
+  const otherClients = clientsBeforeOurClient.concat(clientsAfterOurClient);
+  
+   if(client === 'spider'){
+     return randomClient(clientsBeforeOurClient)
+     
+   }else
 
   // return a random client from the remaining pool
   return randomClient(otherClients);
+  
 }
 
 
@@ -60,35 +66,44 @@ const getRank = function(client) {
   // this is backwards or something? they're supposed to be ranked
   // from lowest to highest, and the top one (spider, obvously) should
   // be ranked #1
-  return clients.length - clients.indexOf(client);
+  let indexOfName = names.indexOf(client);
+  let rankOfClient = clients.length - indexOfName;
+
+  return rankOfClient;
 }
 
 const getMatch = function(client) {
   // get the client's location in our data
-  const clientLocation = clients.indexOf(client);
+  const clientLocation = names.indexOf(client);
 
   // find their two nearest neighbors
   const neighbor1 = clients[clientLocation - 1];
   const neighbor2 = clients[clientLocation + 1];
   const neighbors = [neighbor1, neighbor2];
 
-  // pick one of them and return it
-  return matchRandomly(neighbors);
+  if(client === 'spider'){
+    return clients[4]
+  }  else if (client === 'ladybug'){
+    return clients[1]
+  }else {
+     // pick one of them and return it
+  return randomClient(neighbors);
+  }
 }
 
 
 if (command === 'random') {
-  // match them randomly
-  console.log(matchRandomly(client));
+  console.log(matchRandomly(name));
 } else if (command === 'rate') {
   // get back their rank in the system
-  console.log(getRank(client));
+  console.log(getRank(name));
 } else if (command === 'match') {
   // get one of their neighbors in the ranking
-  console.log(getMatch(client));
-} else if (command !== 'match') {
+  console.log(getMatch(name));
+} else if (command !== 'match' || command !== 'rate' || command !== 'random') {
   console.log('Please try one of our options:');
   console.log('random [client name] -> a totally random other user');
   console.log('match [client name] -> a match of similar ranking');
   console.log("rate [client name] -> the client's ranking in our system");
 }
+
